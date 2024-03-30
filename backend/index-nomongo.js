@@ -1,7 +1,5 @@
-require('dotenv').config()
 const express = require('express')
 const app = express()
-const Contact = require('./models/contact')
 
 let persons = [
     {
@@ -35,6 +33,13 @@ app.use(cors())
 app.use(express.static('dist'))
 
 
+const idGenerator = () => {
+  const random = Math.random()
+  const id = random.toString().slice(2)
+  
+  return Number(id)
+  }
+
 app.post('/api/persons', (req, res) => {
   const body = req.body
   console.log(req.body)
@@ -51,23 +56,21 @@ app.post('/api/persons', (req, res) => {
     })
   }
   
-  const person = new Contact({
+  const person = {
     name: body.name,
     number: body.number,
-    
-  })
+    id: idGenerator()
+  }
 
-  person.save().then(savedPerson => {
-    res.json(savedPerson)
-  })
+  persons = persons.concat(person)
+
+  res.json(person)
 })
 
 
 
 app.get('/api/persons', (req, res) => {
-  Contact.find({}).then(contacts => {
-    res.json(contacts)
-  })
+    res.json(persons)
 })
 
 app.get('/api/info', (req, res) => {
@@ -78,19 +81,15 @@ app.get('/api/info', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  Contact.findById(req.params.id).then(person => {
-    if (person) {      
-      res.json(person)
-    } else {
-      res.status(404).end()
-    }
-  }).catch(error => {
-    console.error(error)
-    res.status(500).send({ error: 'something went wrong' })
-  })
+  const id = Number(req.params.id)
+  const person = persons.find(person => person.id === id)
+  
+  if (person) {
+    res.json(person) 
+  } else {
+    res.status(404).end()
+  }
 })
-
-
 
 app.delete('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
@@ -101,7 +100,7 @@ app.delete('/api/persons/:id', (req, res) => {
 
 
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

@@ -35,6 +35,13 @@ app.use(cors())
 app.use(express.static('dist'))
 
 
+/*const idGenerator = () => {
+  const random = Math.random()
+  const id = random.toString().slice(2)
+  
+  return Number(id)
+  }*/
+
 app.post('/api/persons', (req, res) => {
   const body = req.body
   console.log(req.body)
@@ -54,7 +61,7 @@ app.post('/api/persons', (req, res) => {
   const person = new Contact({
     name: body.name,
     number: body.number,
-    
+    //id: idGenerator()
   })
 
   person.save().then(savedPerson => {
