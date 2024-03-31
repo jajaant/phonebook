@@ -1,11 +1,11 @@
 
-//https://puhelinluettelo-ghsd.onrender.com/api/persons
+
 
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "je",
+    "name": "",
     "number": "435345345"
 }
 

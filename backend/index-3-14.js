@@ -3,20 +3,15 @@ const express = require('express')
 const app = express()
 const Contact = require('./models/contact')
 
+
 const cors = require('cors')
-
-app.use(express.static('dist'))
-
 var morgan = require('morgan')
 
-app.use(cors())
 app.use(express.json())
 app.use(morgan('tiny'))
+app.use(cors())
+app.use(express.static('dist'))
 
-
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
@@ -79,7 +74,7 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 
-app.use(unknownEndpoint)
+
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {

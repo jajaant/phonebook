@@ -35,13 +35,6 @@ app.use(cors())
 app.use(express.static('dist'))
 
 
-/*const idGenerator = () => {
-  const random = Math.random()
-  const id = random.toString().slice(2)
-  
-  return Number(id)
-  }*/
-
 app.post('/api/persons', (req, res) => {
   const body = req.body
   console.log(req.body)
@@ -52,16 +45,16 @@ app.post('/api/persons', (req, res) => {
   }
 
 
-  if(persons.find(person => person.name === body.name)) {
+  /*if(persons.find(person => person.name === body.name)) {
     return res.status(422).json({
       error: 'name must be unique'
     })
-  }
+  }*/
   
   const person = new Contact({
     name: body.name,
     number: body.number,
-    //id: idGenerator()
+    
   })
 
   person.save().then(savedPerson => {
@@ -86,17 +79,14 @@ app.get('/api/info', (req, res) => {
 
 app.get('/api/persons/:id', (req, res) => {
   Contact.findById(req.params.id).then(person => {
-    if (person) {      
+    if (person) {
+      console.log(person)
       res.json(person)
     } else {
       res.status(404).end()
     }
-  }).catch(error => {
-    console.error(error)
-    res.status(500).send({ error: 'something went wrong' })
   })
 })
-
 
 
 app.delete('/api/persons/:id', (req, res) => {
