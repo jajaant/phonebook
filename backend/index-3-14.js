@@ -58,7 +58,6 @@ app.get('/api/info', (req, res) => {
 app.get('/api/persons/:id', (req, res) => {
   Contact.findById(req.params.id).then(person => {
     if (person) {
-      console.log(person)
       res.json(person)
     } else {
       res.status(404).end()
